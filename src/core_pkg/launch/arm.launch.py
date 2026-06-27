@@ -83,14 +83,15 @@ def generate_launch_description():
         package='ros_gz_sim',
         executable='create',
         output='screen',
-        arguments=['-string', robot_desc,
-                '-name', 'robot',
-                '-allow_renaming', 'false',
-                '-x', str(spawn_pose[0]),
-                '-y', str(spawn_pose[1]),
-                '-z', str(spawn_pose[2]),
-                '-Y', str(spawn_pose[3])
-                ],
+        arguments=[
+            '-string', robot_desc,
+            '-name', 'robot',
+            '-allow_renaming', 'false',
+            '-x', str(spawn_pose[0]),
+            '-y', str(spawn_pose[1]),
+            '-z', str(spawn_pose[2]),
+            '-Y', str(spawn_pose[3])
+        ],
     )
     ld.add_action(create_node)
 
