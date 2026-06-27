@@ -51,6 +51,6 @@ def generate_launch_description():
         ),
         launch_arguments={'gz_args': '-g -v2 ', 'on_exit_shutdown': 'true'}.items()
     )
-    # ld.add_action(gzclient_cmd)
+    ld.add_action(gzclient_cmd)
 
     return ld
