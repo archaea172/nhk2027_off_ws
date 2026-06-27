@@ -73,8 +73,11 @@ def generate_launch_description():
         executable='robot_state_publisher',
         name='robot_state_publisher',
         output='screen',
-        parameters=[{'use_sim_time': True}],
-        parameters=[robot_description],
+        parameters=[],
+        parameters=[
+            robot_description,
+            {'use_sim_time': True}
+        ],
     )
     ld.add_action(robot_state_publisher)
     create_node = Node(
