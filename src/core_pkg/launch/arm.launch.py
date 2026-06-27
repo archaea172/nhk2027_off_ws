@@ -4,12 +4,9 @@ import xacro
 from launch import LaunchDescription
 from launch.actions import AppendEnvironmentVariable
 from launch.actions import IncludeLaunchDescription
-from launch.actions import DeclareLaunchArgument
 from launch_ros.actions import Node
-from launch.substitutions import LaunchConfiguration
-from launch.substitutions import PathJoinSubstitution
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch_ros.substitutions import FindPackageShare
+from launch_xml.launch_description_sources import XMLLaunchDescriptionSource
 
 from ament_index_python.packages import get_package_share_directory
 
@@ -60,13 +57,14 @@ def generate_launch_description():
             '/joint_sim2@std_msgs/msg/Float64]ignition.msgs.Double',
             '/joint_sim3@std_msgs/msg/Float64]ignition.msgs.Double',
             '/tf@tf2_msgs/msg/TFMessage[ignition.msgs.Pose_V',
-            # '/tf_static@tf2_msgs/msg/TFMessage[ignition.msgs.Pose_V',
             '/world/nhk2026/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock',
-            '/world/nhk2026/model/robot/joint_state@sensor_msgs/msg/JointState[ignition.msgs.Model'
+            '/world/nhk2026/model/robot/joint_state@sensor_msgs/msg/JointState[ignition.msgs.Model',
+            '/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock',
         ],
         remappings=[
             ('/world/nhk2026/model/robot/joint_state', '/joint_states'),
         ],
+        parameters=[{'use_sim_time': True}],
         output='screen'
     )
     ld.add_action(bridge)
@@ -75,6 +73,7 @@ def generate_launch_description():
         executable='robot_state_publisher',
         name='robot_state_publisher',
         output='screen',
+        parameters=[{'use_sim_time': True}],
         parameters=[robot_description],
     )
     ld.add_action(robot_state_publisher)
@@ -93,4 +92,18 @@ def generate_launch_description():
     )
     ld.add_action(create_node)
 
+    foxglove_bridge_cmd = IncludeLaunchDescription(
+        XMLLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory('foxglove_bridge'),
+                'launch',
+                'foxglove_bridge_launch.xml',
+            )
+        ),
+        launch_arguments={
+            'port': '8765',
+            'use_sim_time': 'true',
+        }.items(),
+    )
+    ld.add_action(foxglove_bridge_cmd)
     return ld
