@@ -6,10 +6,21 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 # find dependencies
+find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+find_package(rclcpp REQUIRED)
+
+include_directories(
+  include
+  include/${PROJECT_NAME}
+)
+
+add_library(mppi_arm
+  src/mppi_arm.cpp
+)
+target_link_libraries(mppi_arm
+  Eigen3::Eigen
+)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
