@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<robot name="ide_arm" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:include filename="$(find sim_pkg)/urdf/materials.xacro" />
+<xacro:include filename="$(find sim_pkg)/urdf/ide_arm_macro.xacro" />
+
+<xacro:ide_arm prefix="" />
+
+</robot>
