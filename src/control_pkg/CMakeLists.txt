@@ -8,6 +8,7 @@ endif()
 # find dependencies
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(ament_cmake REQUIRED)
+find_package(kdl_parser REQUIRED)
 find_package(rclcpp REQUIRED)
 
 include_directories(
@@ -20,6 +21,7 @@ add_library(mppi_arm
 )
 target_link_libraries(mppi_arm
   Eigen3::Eigen
+  kdl_parser::kdl_parser
 )
 
 if(BUILD_TESTING)

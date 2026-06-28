@@ -1,6 +1,14 @@
 #pragma once
 
 #include <Eigen/Dense>
+#include <kdl/tree.hpp>
+#include <kdl/chain.hpp>
+#include <kdl/frames.hpp>
+#include <kdl/jntarray.hpp>
+#include <kdl/chainfksolverpos_recursive.hpp>
+#include <kdl_parser/kdl_parser.hpp>
+
+#include <stdexcept>
 
 struct ArmParams
 {
@@ -28,10 +36,13 @@ struct MppiArmParams
 class MppiArmController
 {
 public:
-    MppiArmController();
+    MppiArmController(const MppiArmParams& parameters);
 
-private:
-    Eigen::Vector3d predictArmPos(const Eigen::Vector3d& link_pos);
+// private:
+    KDL::Frame predictArmPos(const Eigen::Vector3d& link_pos);
 
-    MppiArmParams parameters_;
+    const MppiArmParams parameters_;
+    KDL::Chain chain_;
+    int joint_count_;
+    std::unique_ptr<KDL::ChainFkSolverPos_recursive> fk_solver_;
 };
