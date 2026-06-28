@@ -2,6 +2,16 @@
 
 #include <Eigen/Dense>
 
+struct ArmParams
+{
+    std::string urdf;
+    Eigen::Vector3d max_link;
+    Eigen::Vector3d min_link;
+
+    std::string base_link;
+    std::string end_link;
+};
+
 struct MppiArmParams
 {
     double control_frequency; // hz
@@ -11,14 +21,17 @@ struct MppiArmParams
     Eigen::Matrix2d cov;
     double lambda;
     double gamma;
-};
 
-struct ArmParams
-{
+    ArmParams arm_parameters;
 };
-
 
 class MppiArmController
 {
+public:
+    MppiArmController();
 
+private:
+    Eigen::Vector3d predictArmPos(const Eigen::Vector3d& link_pos);
+
+    MppiArmParams parameters_;
 };
