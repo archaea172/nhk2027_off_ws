@@ -26,7 +26,7 @@ struct MppiArmParams
     double predict_resolution;
     int predict_horizon;
     int sample_num;
-    Eigen::Matrix2d cov;
+    Eigen::Matrix3d cov;
     double lambda;
     double gamma;
 

@@ -24,6 +24,22 @@ target_link_libraries(mppi_arm
   kdl_parser::kdl_parser
 )
 
+
+add_executable(test_mppi
+  src/test_mppi.cpp
+)
+ament_target_dependencies(test_mppi
+  rclcpp
+  std_msgs
+)
+target_link_libraries(test_mppi
+  mppi_arm
+)
+install(
+  TARGETS test_mppi
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights
