@@ -23,6 +23,7 @@ struct ArmParams
 
 struct MppiArmParams
 {
+    Eigen::Vector3d goal_pos;
     double control_frequency; // hz
     double predict_resolution;
     int predict_horizon;
@@ -42,6 +43,11 @@ public:
 // private:
     KDL::Frame predictArmPos(const Eigen::Vector3d& link_pos);
     Eigen::Matrix<double, 3, Eigen::Dynamic> samplinglinkPos(const Eigen::Vector3d& now_link_pos);
+    double calcCost(
+        const std::vector<KDL::Frame>& link,
+        const Eigen::Matrix<double, 3, Eigen::Dynamic>& link_pos
+    );
+    Eigen::VectorXd calcWeights(const Eigen::VectorXd& costs);
 
     const MppiArmParams parameters_;
 

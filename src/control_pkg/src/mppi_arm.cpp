@@ -74,3 +74,20 @@ KDL::Frame MppiArmController::predictArmPos(const Eigen::Vector3d& link_pos)
 
     return current_pose;
 }
+
+double MppiArmController::calcCost(
+    const std::vector<KDL::Frame>& link,
+    const Eigen::Matrix<double, 3, Eigen::Dynamic>& link_pos
+)
+{
+    return 0;
+}
+
+Eigen::VectorXd MppiArmController::calcWeights(const Eigen::VectorXd& costs)
+{
+    double rho = costs.minCoeff();
+    Eigen::VectorXd weights = (-(costs.array() - rho) / this->parameters_.lambda).exp().matrix();
+    weights /= weights.sum();
+
+    return weights;
+}
