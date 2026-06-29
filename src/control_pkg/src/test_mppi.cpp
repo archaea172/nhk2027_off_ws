@@ -43,6 +43,7 @@ int main(int argc, char *argv[])
     start = std::chrono::system_clock::now(); // 計測開始時間
     for (int i = 0; i < parameters.sample_num; ++i)
     {
+        test_controller.samplinglinkPos(pos);
         for (int j = 0; j < parameters.predict_horizon; ++j)
         {
             test_controller.predictArmPos(pos);

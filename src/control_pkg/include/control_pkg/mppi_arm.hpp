@@ -9,6 +9,7 @@
 #include <kdl_parser/kdl_parser.hpp>
 
 #include <stdexcept>
+#include <random>
 
 struct ArmParams
 {
@@ -40,9 +41,14 @@ public:
 
 // private:
     KDL::Frame predictArmPos(const Eigen::Vector3d& link_pos);
+    Eigen::Matrix<double, 3, Eigen::Dynamic> samplinglinkPos(const Eigen::Vector3d& now_link_pos);
 
     const MppiArmParams parameters_;
+
     KDL::Chain chain_;
     int joint_count_;
     std::unique_ptr<KDL::ChainFkSolverPos_recursive> fk_solver_;
+
+    std::mt19937 rng_;
+    Eigen::Matrix3d L_;
 };

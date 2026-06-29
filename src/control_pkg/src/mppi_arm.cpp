@@ -3,6 +3,7 @@
 MppiArmController::MppiArmController(const MppiArmParams& parameters)
 : parameters_(parameters)
 {
+    /* kdl init begin */
     KDL::Tree tree;
 
     if (!kdl_parser::treeFromString(parameters_.arm_parameters.urdf, tree))
@@ -28,6 +29,37 @@ MppiArmController::MppiArmController(const MppiArmParams& parameters)
     }
 
     this->fk_solver_ = std::make_unique<KDL::ChainFkSolverPos_recursive>(this->chain_);
+    /* kdl init end */
+    
+    /* sampling end */
+    Eigen::LLT<Eigen::Matrix3d> llt(this->parameters_.cov);
+    this->L_ = llt.matrixL(); 
+    /* sampling end */
+}
+
+Eigen::Matrix<double, 3, Eigen::Dynamic> MppiArmController::samplinglinkPos(const Eigen::Vector3d& now_link_pos)
+{
+    const int horizon = this->parameters_.predict_horizon;
+    std::normal_distribution<double> normal(0.0, 1.0);
+
+    Eigen::Matrix<double, 3, Eigen::Dynamic> z(3, horizon);
+
+    z = Eigen::Matrix<double, 3, Eigen::Dynamic>::NullaryExpr(
+        3, horizon,
+        [&]() {
+            return normal(this->rng_);
+        }
+    );
+
+    Eigen::Matrix<double, 3, Eigen::Dynamic> control_array(3, horizon);
+    control_array.noalias() = this->L_ * z;
+    control_array.col(0) += now_link_pos;
+    for (int i = 1; i < horizon; ++i)
+    {
+        control_array.col(i) += control_array.col(i - 1);
+    }
+
+    return control_array;
 }
 
 KDL::Frame MppiArmController::predictArmPos(const Eigen::Vector3d& link_pos)
