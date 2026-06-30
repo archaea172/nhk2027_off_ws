@@ -6,6 +6,18 @@ MppiArmServer::MppiArmServer()
 
 }
 
+void MppiArmServer::robot_description_callback(const std_msgs::msg::String::SharedPtr rxdata)
+{
+    this->is_subscription_robot_description_ = true;
+
+    this->urdf_ = rxdata->data;
+}
+
+void MppiArmServer::joint_state_callback(const sensor_msgs::msg::JointState::SharedPtr rxdata)
+{
+    this->joint_data_ = *rxdata;
+}
+
 int main(int argc, char *argv[])
 {
     rclcpp::init(argc, argv);
