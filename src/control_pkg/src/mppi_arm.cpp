@@ -80,7 +80,25 @@ double MppiArmController::calcCost(
     const Eigen::Matrix<double, 3, Eigen::Dynamic>& link_pos
 )
 {
-    return 0;
+    (void)link_pos;
+
+    constexpr double two_pi = 6.283185307179586476925286766559;
+    double cost = 0.0;
+    const double goal_y = this->parameters_.goal_pos(0);
+    const double goal_z = this->parameters_.goal_pos(1);
+    const double goal_roll = this->parameters_.goal_pos(2);
+    const int horizon = this->parameters_.predict_horizon;
+
+    for (int i = 0; i < horizon; ++i)
+    {
+        const double diff_y = link[i].p.y() - goal_y;
+        const double diff_z = link[i].p.z() - goal_z;
+        const double roll = std::atan2(link[i].M(2, 1), link[i].M(2, 2));
+        const double diff_roll = std::remainder(roll - goal_roll, two_pi);
+        cost += diff_y * diff_y + diff_z * diff_z + diff_roll * diff_roll;
+    }
+
+    return cost;
 }
 
 Eigen::VectorXd MppiArmController::calcWeights(const Eigen::VectorXd& costs)

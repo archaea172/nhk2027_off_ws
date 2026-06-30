@@ -10,6 +10,7 @@
 
 #include <stdexcept>
 #include <random>
+#include <cmath>
 
 struct ArmParams
 {
