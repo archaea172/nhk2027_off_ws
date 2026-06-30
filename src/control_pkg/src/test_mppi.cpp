@@ -44,21 +44,7 @@ int main(int argc, char *argv[])
     std::chrono::system_clock::time_point  start, end; // 型は auto で可
     start = std::chrono::system_clock::now(); // 計測開始時間
 
-    Eigen::VectorXd costs(parameters.sample_num);
-    Eigen::Matrix<double, 3, Eigen::Dynamic> initial_arm_pos(3, parameters.sample_num);
-    for (int i = 0; i < parameters.sample_num; ++i)
-    {
-        std::vector<KDL::Frame> frames;
-        Eigen::Matrix<double, 3, Eigen::Dynamic> link_poses = test_controller.samplinglinkPos(pos);
-        for (int j = 0; j < parameters.predict_horizon; ++j)
-        {
-            frames.push_back(test_controller.predictArmPos(link_poses.col(j)));
-        }
-        initial_arm_pos.col(i) = link_poses.col(0);
-        costs(i) = test_controller.calcCost(frames, link_poses);
-    }
-    Eigen::VectorXd weights = test_controller.calcWeights(costs);
-    Eigen::Vector3d arm_pos = initial_arm_pos * weights;
+    Eigen::Vector3d arm_pos = test_controller.controlLoop(pos);
 
     end = std::chrono::system_clock::now();  // 計測終了時間
     

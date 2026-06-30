@@ -37,6 +37,31 @@ MppiArmController::MppiArmController(const MppiArmParams& parameters)
     /* sampling end */
 }
 
+Eigen::Vector3d MppiArmController::controlLoop(
+    const Eigen::Vector3d& now_link_poses
+)
+{
+    Eigen::VectorXd costs(this->parameters_.sample_num);
+    Eigen::Matrix<double, 3, Eigen::Dynamic> initial_arm_pos(3, this->parameters_.sample_num);
+
+    for (int i = 0; i < this->parameters_.sample_num; ++i)
+    {
+        std::vector<KDL::Frame> frames;
+        Eigen::Matrix<double, 3, Eigen::Dynamic> link_poses = this->samplinglinkPos(now_link_poses);
+        for (int j = 0; j < this->parameters_.predict_horizon; ++j)
+        {
+            frames.push_back(this->predictArmPos(link_poses.col(j)));
+        }
+        initial_arm_pos.col(i) = link_poses.col(0);
+        costs(i) = this->calcCost(frames, link_poses);
+    }
+
+    Eigen::VectorXd weights = this->calcWeights(costs);
+    Eigen::Vector3d next_link_pos = initial_arm_pos * weights;
+
+    return next_link_pos;
+}
+
 Eigen::Matrix<double, 3, Eigen::Dynamic> MppiArmController::samplinglinkPos(const Eigen::Vector3d& now_link_pos)
 {
     const int horizon = this->parameters_.predict_horizon;

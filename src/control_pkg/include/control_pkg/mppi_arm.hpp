@@ -40,8 +40,9 @@ class MppiArmController
 {
 public:
     MppiArmController(const MppiArmParams& parameters);
+    Eigen::Vector3d controlLoop(const Eigen::Vector3d& now_link_poses);
 
-// private:
+private:
     KDL::Frame predictArmPos(const Eigen::Vector3d& link_pos);
     Eigen::Matrix<double, 3, Eigen::Dynamic> samplinglinkPos(const Eigen::Vector3d& now_link_pos);
     double calcCost(
