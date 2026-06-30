@@ -53,6 +53,8 @@ ament_target_dependencies(mppi_arm_server
 )
 target_link_libraries(mppi_arm_server
   mppi_arm
+  Eigen3::Eigen
+  kdl_parser::kdl_parser
 )
 install(
   TARGETS mppi_arm_server

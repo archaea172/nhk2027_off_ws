@@ -1,5 +1,11 @@
 #include "mppi_arm_server.hpp"
 
+MppiArmServer::MppiArmServer()
+: rclcpp::Node("mppi_arm_server")
+{
+
+}
+
 int main(int argc, char *argv[])
 {
     rclcpp::init(argc, argv);
