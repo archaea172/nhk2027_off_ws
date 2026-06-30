@@ -10,6 +10,9 @@ find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(ament_cmake REQUIRED)
 find_package(kdl_parser REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(rclcpp_action REQUIRED)
 
 include_directories(
   include
@@ -24,7 +27,6 @@ target_link_libraries(mppi_arm
   kdl_parser::kdl_parser
 )
 
-
 add_executable(test_mppi
   src/test_mppi.cpp
 )
@@ -37,6 +39,23 @@ target_link_libraries(test_mppi
 )
 install(
   TARGETS test_mppi
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+
+add_executable(mppi_arm_server
+  src/mppi_arm_server.cpp
+)
+ament_target_dependencies(mppi_arm_server
+  rclcpp
+  rclcpp_action
+  sensor_msgs
+)
+target_link_libraries(mppi_arm_server
+  mppi_arm
+)
+install(
+  TARGETS mppi_arm_server
   DESTINATION lib/${PROJECT_NAME}
 )
 
