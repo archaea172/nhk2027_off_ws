@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Eigen/Dense>
+#include <cmath>
 
 struct DistanceFieldMap
 {
@@ -26,7 +27,7 @@ struct particle
     double weight;
 };
 
-struct mcl_parameters
+struct mclParameters
 {
     double dt;
     double particle_num;
@@ -41,7 +42,15 @@ class Mcl
 {
 public:
     Mcl();
+    Pose2D calcPose();
 
 private:
+    std::vector<particle> updateParticles(
+        std::vector<particle> now_particles,
+        Eigen::Vector3d vel_feedback
+    );
+
     Pose2D now_pose_;
+    mclParameters parameters_;
+    std::vector<particle> particles_;
 };
