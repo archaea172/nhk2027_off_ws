@@ -2,6 +2,7 @@
 
 #include <Eigen/Dense>
 #include <cmath>
+#include <random>
 
 struct DistanceFieldMap
 {
@@ -29,6 +30,7 @@ struct particle
 
 struct mclParameters
 {
+    Pose2D initial_pose;
     double dt;
     double particle_num;
     double sigma_x;
@@ -41,7 +43,7 @@ struct mclParameters
 class Mcl
 {
 public:
-    Mcl();
+    Mcl(const mclParameters& parameters);
     Pose2D calcPose();
 
 private:
@@ -53,4 +55,6 @@ private:
     Pose2D now_pose_;
     mclParameters parameters_;
     std::vector<particle> particles_;
+
+    std::mt19937 rng_{std::random_device{}()};
 };
