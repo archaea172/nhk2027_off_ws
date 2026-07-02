@@ -44,9 +44,9 @@ class Mcl
 {
 public:
     Mcl(const mclParameters& parameters);
-    Pose2D calcPose();
+    // Pose2D calcPose();
 
-private:
+// private:
     std::vector<particle> updateParticles(
         std::vector<particle> now_particles,
         Eigen::Vector3d vel_feedback

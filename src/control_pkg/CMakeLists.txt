@@ -27,6 +27,13 @@ target_link_libraries(mppi_arm
   kdl_parser::kdl_parser
 )
 
+add_library(mcl
+  src/mcl.cpp
+)
+target_link_libraries(mcl
+  Eigen3::Eigen
+)
+
 add_executable(test_mppi
   src/test_mppi.cpp
 )
@@ -39,6 +46,17 @@ target_link_libraries(test_mppi
 )
 install(
   TARGETS test_mppi
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+add_executable(test_mcl
+  src/test_mcl.cpp
+)
+target_link_libraries(test_mcl
+  mcl
+)
+install(
+  TARGETS test_mcl
   DESTINATION lib/${PROJECT_NAME}
 )
 
