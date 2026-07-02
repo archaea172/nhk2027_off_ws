@@ -33,9 +33,14 @@ struct mclParameters
     Pose2D initial_pose;
     double dt;
     double particle_num;
-    double sigma_x;
-    double sigma_y;
-    double sigma_theta;
+    double odom_noise_tt;
+    double odom_noise_rt;
+    double odom_noise_tr;
+    double odom_noise_rr;
+
+    double odom_noise_initial_x;
+    double odom_noise_initial_y;
+    double odom_noise_initial_theta;
     DistanceFieldMap map;
 };
 

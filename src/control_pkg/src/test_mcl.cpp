@@ -11,9 +11,13 @@ int main()
     parameters.initial_pose.y = 0;
     parameters.initial_pose.theta = 0;
     parameters.particle_num = 500;
-    parameters.sigma_x = 0.2;
-    parameters.sigma_y = 0.2;
-    parameters.sigma_theta = 0.4;
+    parameters.odom_noise_tt = 0.2;
+    parameters.odom_noise_rt = 0.2;
+    parameters.odom_noise_tr = 0.4;
+    parameters.odom_noise_rr = 0.4;
+    parameters.odom_noise_initial_x = 0.1;
+    parameters.odom_noise_initial_y = 0.1;
+    parameters.odom_noise_initial_theta = 0.3;
     
     Mcl mcl_test(parameters);
     Eigen::Vector3d vel_feedback;
